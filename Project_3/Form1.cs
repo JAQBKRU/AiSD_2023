@@ -14,7 +14,7 @@ namespace MainProject
             labelAfter.Text = "WYNIK: ";
             int[] arr = { 4, 2, 0, 7, 9, 1 };
             if(arrayInput.Text != "") arr = arrayInput.Text.Split(',').Select(s => int.Parse(s)).ToArray();//userInput
-            selectSort(arr);
+            selectionSort(arr);
             labelAfter.Text += string.Join(", ", arr);
         }
 
@@ -29,7 +29,7 @@ namespace MainProject
             return minElement;
         }
 
-        void selectSort(int[] arr)
+        void selectionSort(int[] arr)
         {
             for (int i = 0; i < arr.Length - 1; i++)
             {
