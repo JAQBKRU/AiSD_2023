@@ -1,3 +1,0 @@
-https://www.freecodecamp.org/news/sorting-algorithms-explained-with-examples-in-python-java-and-c/
-https://www.programiz.com/dsa/sorting-algorithm
-https://lamfo-unb.github.io/2019/04/21/Sorting-algorithms/

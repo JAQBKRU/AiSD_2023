@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 
 namespace MainProject
 {
@@ -8,8 +8,6 @@ namespace MainProject
         {
             InitializeComponent();
         }
-
-        //https://stackoverflow.com/questions/15799034/insertion-sort-vs-selection-sort
 
         int[] convertData()
         {
@@ -40,6 +38,10 @@ namespace MainProject
                         (arr[i + 1], arr[i]) = (arr[i], arr[i + 1]);
                         cbz = 1;
                     }
+                }
+                if (cbz == 0)
+                {
+                    break;
                 }
             }
         }
