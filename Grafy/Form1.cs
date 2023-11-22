@@ -93,7 +93,7 @@ namespace Grafy
             }
         }
 
-        // --- Drzewo z cyklem ---
+        // --- Graf z cyklem ---
         public class Wezel2
         {
             public int wartosc;
