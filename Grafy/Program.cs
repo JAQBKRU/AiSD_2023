@@ -1,4 +1,4 @@
-namespace MainProject
+namespace Grafy
 {
     internal static class Program
     {
