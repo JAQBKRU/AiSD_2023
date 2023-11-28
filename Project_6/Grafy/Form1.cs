@@ -135,23 +135,14 @@ namespace Grafy
                 drzewo = new DrzewoBinarne(5);
             }
 
-            drzewo.WyswietlDrzewo(5);
             drzewo.Add(3);
-            drzewo.WyswietlDrzewo(3);
             drzewo.Add(3);
-            drzewo.WyswietlDrzewo(3);
             drzewo.Add(6);
-            drzewo.WyswietlDrzewo(6);
             drzewo.Add(7);
-            drzewo.WyswietlDrzewo(7);
             drzewo.Add(-3);
-            drzewo.WyswietlDrzewo(-3);
             drzewo.Add(2);
-            drzewo.WyswietlDrzewo(2);
             drzewo.Add(0);
-            drzewo.WyswietlDrzewo(0);
             drzewo.Add(1);
-            drzewo.WyswietlDrzewo(1);
         }
         // --- BST - Binarne drzewo przeszukan ---
 
@@ -227,21 +218,6 @@ namespace Grafy
                             obecnyWezel = obecnyWezel.dzieckoPrawe;
                         }
                     }
-                }
-            }
-
-            public void WyswietlDrzewo(int dodany)
-            {
-                WyswietlRekurencyjnie(korzen, dodany);
-            }
-
-            private void WyswietlRekurencyjnie(Wezel3 wezel, int dodany)
-            {
-                if (wezel != null)
-                {
-                    MessageBox.Show(wezel.wartosc + "(" + dodany + "): " + wezel.dzieckoLewe + "|" + wezel.dzieckoPrawe);
-                    WyswietlRekurencyjnie(wezel.dzieckoLewe, dodany);
-                    WyswietlRekurencyjnie(wezel.dzieckoPrawe, dodany);
                 }
             }
         }
