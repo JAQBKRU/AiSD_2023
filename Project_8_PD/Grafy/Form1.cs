@@ -10,8 +10,13 @@ namespace Grafy
             InitializeComponent();
         }
 
+        /*LINKI
+         https://eduinf.waw.pl/inf/alg/001_search/0132.php
+         https://www.algorytm.edu.pl/grafy
+         */
+
         // --- DFS na drzewie ---
-        //grafy, przeszukiwanie grafow wszerz
+        //graf - przeszukiwanie grafu wszerz - BFS
         //https://www.algorytm.edu.pl/grafy/bfs.html
         private void btn1_Click(object sender, EventArgs e)
         {
@@ -80,9 +85,7 @@ namespace Grafy
 
 
         // --- Graf z cyklem ---
-        //https://eduinf.waw.pl/inf/alg/001_search/0132.php
         //https://www.algorytm.edu.pl/grafy/przeszukiwanie-w-glab.html
-        //https://www.algorytm.edu.pl/grafy/bfs.html
         string wynik = "";
         List<Wezel2> odwiedzone = new();
         void A2(Wezel2 w)
@@ -135,14 +138,6 @@ namespace Grafy
                 drzewo = new DrzewoBinarne(5);
             }
 
-            /*drzewo.Add(3);
-            drzewo.Add(3);
-            drzewo.Add(6);
-            drzewo.Add(7);
-            drzewo.Add(-3);
-            drzewo.Add(2);
-            drzewo.Add(0);
-            drzewo.Add(1);*/
             drzewo.Add(3);
             drzewo.Add(4);
             drzewo.Add(8);
@@ -152,8 +147,11 @@ namespace Grafy
             drzewo.Add(3);
             drzewo.Add(5);
             drzewo.Add(1);
+            //drzewo.Add(10);
+            //drzewo.Add(9);
+            //drzewo.Add(12);
 
-            MessageBox.Show("Zad1: " + drzewo.Znajdz(6).ToString()
+            /*MessageBox.Show("Zad1: " + drzewo.Znajdz(6).ToString()
                 + "\nZad2: " + ZnajdzMin(drzewo.korzen).wartosc.ToString()
                 + "\nZad3: " + ZnajdzMax(drzewo.korzen).wartosc.ToString()
                 + "\nZad4[5]: " + Nastepnik(drzewo.Znajdz(5)).wartosc.ToString()
@@ -165,9 +163,9 @@ namespace Grafy
                 + "\nZad4[2]: " + Nastepnik(drzewo.Znajdz(2)).wartosc.ToString()
                 + "\nZad4[3]: " + Nastepnik(drzewo.korzen.leweDziecko.praweDziecko.leweDziecko).wartosc.ToString()
                 + "\nZad4[5]: " + Nastepnik(drzewo.korzen.praweDziecko.leweDziecko.leweDziecko).wartosc.ToString()
-                + "\nZad4[1]: " + Nastepnik(drzewo.Znajdz(1)).wartosc.ToString());
+                + "\nZad4[1]: " + Nastepnik(drzewo.Znajdz(1)).wartosc.ToString());*/
 
-            MessageBox.Show("Zad4[5]: " + Poprzednik(drzewo.Znajdz(5)).wartosc.ToString()
+            /*MessageBox.Show("Zad4[5]: " + Poprzednik(drzewo.Znajdz(5)).wartosc.ToString()
                 + "\nZad4[3]: " + Poprzednik(drzewo.Znajdz(3)).wartosc.ToString()
                 + "\nZad4[4]: " + Poprzednik(drzewo.Znajdz(4)).wartosc.ToString()
                 + "\nZad4[8]: " + Poprzednik(drzewo.Znajdz(8)).wartosc.ToString()
@@ -176,7 +174,21 @@ namespace Grafy
                 + "\nZad4[2]: " + Poprzednik(drzewo.Znajdz(2)).wartosc.ToString()
                 + "\nZad4[3]: " + Poprzednik(drzewo.korzen.leweDziecko.praweDziecko.leweDziecko).wartosc.ToString()
                 + "\nZad4[5]: " + Poprzednik(drzewo.korzen.praweDziecko.leweDziecko.leweDziecko).wartosc.ToString()
-                + "\nZad4[1]: " + Poprzednik(drzewo.Znajdz(1)).wartosc.ToString());
+                + "\nZad4[1]: " + Poprzednik(drzewo.Znajdz(1)).wartosc.ToString());*/
+
+            //Wezel - brak dzieci
+            //Usun(drzewo.korzen.praweDziecko.leweDziecko.leweDziecko);//Usun(5)
+            //MessageBox.Show("Usun(5): " + ZnajdzMin(drzewo.korzen.praweDziecko.leweDziecko).wartosc.ToString());//Usun(5)
+
+            //Wezel - 1 dziecko
+            //Usun(drzewo.korzen.praweDziecko);//Usun(8)
+            //MessageBox.Show("Usun(8): " + ZnajdzMin(drzewo.korzen.praweDziecko).wartosc.ToString());//Usun(8)
+
+            //Wezel - 2 dzieci
+            Usun(drzewo.korzen.praweDziecko.leweDziecko);//Usun(6)
+            MessageBox.Show("Usun(6): " + drzewo.korzen.praweDziecko.leweDziecko.wartosc.ToString());//Usun(6)
+            //Usun(drzewo.korzen);//Usun(korzen)
+            //MessageBox.Show("Usun(korzen): " + drzewo.korzen.wartosc.ToString());//Usun(korzen)
         }
         // --- BST - Binarne drzewo przeszukan ---
 
@@ -289,7 +301,7 @@ namespace Grafy
 
 
         //2. Wezel3 ZnajdzMin(Wezel3 w) - np. podaje 5, najmniejszosc wartosc w tym poddrzewie, tu zwroci 1 - na max w lewo idziemy
-        public Wezel3 ZnajdzMin(Wezel3 w)
+        /*public Wezel3 ZnajdzMin(Wezel3 w)
         {
             if (w.leweDziecko != null)
             {
@@ -297,6 +309,14 @@ namespace Grafy
                 return ZnajdzMin(w1);
             }
             return new Wezel3(w.wartosc);
+        }*/
+        public Wezel3 ZnajdzMin(Wezel3 w)
+        {
+            while (w.leweDziecko != null)
+            {
+                w = w.leweDziecko;
+            }
+            return w;
         }
 
         //3. Wezel3 ZnajdzMax(Wezel3 w) - to samo, na max w prawo
@@ -310,11 +330,11 @@ namespace Grafy
             return new Wezel3(w.wartosc);
         }
 
+        //bedzie na kolosie
         //4. Wezel3 Nastepnik(Wezel3 w) - nastepny po, np po 1 2
         public Wezel3 Nastepnik(Wezel3 w)
         {
             //1) gdy jest prawe dziecko, to uzyj funkcji znajdzMin(w.praweDziecko)
-            var dziecko = w;
             if (w.praweDziecko != null)
             {
                 return ZnajdzMin(w.praweDziecko);
@@ -322,24 +342,21 @@ namespace Grafy
 
             //2) gdy nie ma prawego dziecka idz do gory az wyjdziesz jako lewe dziecko w rodzinie, nastepnik to ten rodzic
             //3) gdy nie ma prawego dziecka, ide do gory, gdy nie zachodzi(2) i nie moge isc do gory => nie ma nastepnika
-            while (dziecko.rodzic != null && dziecko == dziecko.rodzic.praweDziecko)
+            while (w.rodzic != null)
             {
-                dziecko = dziecko.rodzic;
+                if (w.rodzic.leweDziecko == w)
+                {
+                    return w.rodzic;
+                }
+                w = w.rodzic;
             }
-            if (dziecko.rodzic == null) return new Wezel3(-999);
-            return dziecko.rodzic;
-
-            // --- [moj kod] ---
-            //var x = WyjdzDoGory(w.rodzic, w.wartosc);
-            //return x != null ? x : new Wezel3(-999);
-            // --- [moj kod] ---
+            return new Wezel3(-999);
         }
 
         //4. Wezel3 Poprzednik(Wezel3 w)
         public Wezel3 Poprzednik(Wezel3 w)
         {
-            //1) gdy jest prawe dziecko, to uzyj funkcji znajdzMax(w.leweDziecko)
-            var dziecko = w;
+            //1) gdy jest lewe dziecko, to uzyj funkcji znajdzMax(w.leweDziecko)
             if (w.leweDziecko != null)
             {
                 return ZnajdzMax(w.leweDziecko);
@@ -347,34 +364,144 @@ namespace Grafy
 
             //2) gdy nie ma lewego dziecka idz do gory az wyjdziesz jako prawe dziecko w rodzinie, poprzednik to ten rodzic
             //3) gdy nie ma lewego dziecka, ide do gory, gdy nie zachodzi(2) i nie moge isc do gory => nie ma poprzednika
-            while (dziecko.rodzic != null && dziecko == dziecko.rodzic.leweDziecko)
+            while (w.rodzic != null)
             {
-                dziecko = dziecko.rodzic;
+                if (w.rodzic.praweDziecko == w)
+                {
+                    return w.rodzic;
+                }
+                w = w.rodzic;
             }
-            if (dziecko.rodzic == null) return new Wezel3(-999);
-            return dziecko.rodzic;
-
-            // --- [moj kod] ---
-            //var x = WyjdzDoGory(w.rodzic, w.wartosc);
-            //return x != null ? x : new Wezel3(-999);
-            // --- [moj kod] ---
+            return new Wezel3(-999);
         }
 
-        // --- [moj kod] ---
-        /*public Wezel3 WyjdzDoGory(Wezel3 rodzic, int wartoscDziecka)
+        public Wezel3 Usun(Wezel3 w)
         {
-            if(rodzic.leweDziecko != null)
+            //1) gdy nie ma dzieci, to odwiaz
+            if(w.leweDziecko == null && w.praweDziecko == null)
             {
-                if(rodzic.leweDziecko.wartosc == wartoscDziecka)
+                if(w == w.rodzic.leweDziecko)
                 {
-                    return rodzic;
+                    w.rodzic.leweDziecko = null;
+                    w.rodzic = null;
+                }
+
+                else if (w == w.rodzic.praweDziecko)
+                {
+                    w.rodzic.praweDziecko = null;
+                    w.rodzic = null;
+                }
+
+                return null;
+            }
+
+            //2) gdy 1 dziecko, to dziecko wchodzi na miejsce rodzica
+            if (w.leweDziecko != null && w.praweDziecko == null)
+            {
+                //wyszlismy jako prawe dziecko rodzica - Usun >= rodzic
+                if(w.wartosc >= w.rodzic.wartosc)
+                {
+                    w.rodzic.praweDziecko = w.leweDziecko;
+                    w.leweDziecko.rodzic = w.rodzic;
+
+                    //usuniecie wezla
+                    w.rodzic = null;
+                    w.leweDziecko = null;
+                }
+
+                //wyszlismy jako lewe dziecko rodzica - Usun < rodzic
+                else//(w.wartosc < w.rodzic.wartosc)
+                {
+                    w.rodzic.leweDziecko = w.leweDziecko;
+                    w.leweDziecko.rodzic = w.rodzic;
+
+                    //usuniecie wezla
+                    w.rodzic = null;
+                    w.leweDziecko = null;
+                }
+
+                return null;
+            }
+
+            if (w.praweDziecko != null && w.leweDziecko == null)
+            {
+                //wyszlismy jako prawe dziecko rodzica - Usun >= rodzic
+                if (w.wartosc >= w.rodzic.wartosc)
+                {
+                    w.rodzic.praweDziecko = w.praweDziecko;
+                    w.praweDziecko.rodzic = w.rodzic;
+
+                    //usuniecie wezla
+                    w.rodzic = null;
+                    w.leweDziecko = null;
+                }
+
+                //wyszlismy jako lewe dziecko rodzica - Usun < rodzic
+                else//(w.wartosc < w.rodzic.wartosc)
+                {
+                    w.rodzic.leweDziecko = w.praweDziecko;
+                    w.praweDziecko.rodzic = w.rodzic;
+
+                    //usuniecie wezla
+                    w.rodzic = null;
+                    w.praweDziecko = null;
+                }
+
+                return null;
+            }
+
+            //3) gdy 2 dzieci, to albo nastepnik albo poprzednik i on powiniem byc w 1) lub 2)
+            if(w.leweDziecko != null && w.praweDziecko != null)
+            {
+                var nastepnik = Nastepnik(w);
+
+                //przypadek gdy usuwamy korzen
+                if(w.rodzic == null)
+                {
+                    w.leweDziecko.rodzic = nastepnik;
+                    w.praweDziecko.rodzic = nastepnik;
+                    nastepnik.leweDziecko = w.leweDziecko;
+                    nastepnik.praweDziecko = w.praweDziecko;
+                    drzewo.korzen = nastepnik;
+
+                    //usuwanie korzenia
+                    w.leweDziecko = null;
+                    w.praweDziecko = null;
+
+                    return null;
+                }
+                
+                //wychodzi jako lewe dziecko rodzica
+                if (w == w.rodzic.leweDziecko)
+                {
+                    w.rodzic.leweDziecko = nastepnik;
+                    nastepnik.leweDziecko = w.leweDziecko;
+                    nastepnik.praweDziecko = null;
+                    nastepnik.rodzic = w.rodzic;
+                    w.leweDziecko.rodzic = nastepnik;
+
+                    //usuwanie wezla
+                    w.praweDziecko = null;
+                    w.rodzic = null;
+                }
+                
+                //wychodzi jako prawe dziecko rodzica
+                else//(w == w.rodzic.praweDziecko)
+                {
+                    w.rodzic.praweDziecko = nastepnik;
+                    nastepnik.leweDziecko = w.leweDziecko;
+                    nastepnik.praweDziecko = null;
+                    nastepnik.rodzic = w.rodzic;
+                    w.leweDziecko.rodzic = nastepnik;
+
+                    //usuwanie wezla
+                    w.praweDziecko = null;
+                    w.rodzic = null;
                 }
             }
-            if (rodzic.rodzic != null) return WyjdzDoGory(rodzic.rodzic, rodzic.wartosc);
 
             return null;
-        }*/
-        // --- [moj kod] ---
+        }
 
 
         // --- BFS ---
@@ -441,7 +568,8 @@ namespace Grafy
 
         // [---] W DOMU DOKONCZYC [---]
 
-
+        //kolokwium - x1 teoria i x1 praktyka, np. przeprowadz algorytm
+        //praktyka - zad z nastepnikiem i poprzednikiem raczej
 
         // [---] W DOMU DOKONCZYC [---]
     }

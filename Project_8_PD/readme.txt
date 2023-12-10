@@ -1,1 +1,1 @@
-robiona praca domowa z 29.11 -> X.12
+robiona praca domowa z 7.12 -> 14.12
