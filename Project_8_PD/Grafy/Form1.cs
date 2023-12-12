@@ -147,9 +147,9 @@ namespace Grafy
             drzewo.Add(3);
             drzewo.Add(5);
             drzewo.Add(1);
-            //drzewo.Add(10);
-            //drzewo.Add(9);
-            //drzewo.Add(12);
+            drzewo.Add(10);
+            drzewo.Add(9);
+            drzewo.Add(12);
 
             /*MessageBox.Show("Zad1: " + drzewo.Znajdz(6).ToString()
                 + "\nZad2: " + ZnajdzMin(drzewo.korzen).wartosc.ToString()
@@ -185,8 +185,8 @@ namespace Grafy
             //MessageBox.Show("Usun(8): " + ZnajdzMin(drzewo.korzen.praweDziecko).wartosc.ToString());//Usun(8)
 
             //Wezel - 2 dzieci
-            Usun(drzewo.korzen.praweDziecko.leweDziecko);//Usun(6)
-            MessageBox.Show("Usun(6): " + drzewo.korzen.praweDziecko.leweDziecko.wartosc.ToString());//Usun(6)
+            //Usun(drzewo.korzen.praweDziecko.leweDziecko);//Usun(6)
+            //MessageBox.Show("Usun(6): " + drzewo.korzen.praweDziecko.leweDziecko.wartosc.ToString());//Usun(6)
             //Usun(drzewo.korzen);//Usun(korzen)
             //MessageBox.Show("Usun(korzen): " + drzewo.korzen.wartosc.ToString());//Usun(korzen)
         }
@@ -378,125 +378,95 @@ namespace Grafy
         public Wezel3 Usun(Wezel3 w)
         {
             //1) gdy nie ma dzieci, to odwiaz
-            if(w.leweDziecko == null && w.praweDziecko == null)
+            if (w.leweDziecko == null && w.praweDziecko == null)
             {
-                if(w == w.rodzic.leweDziecko)
-                {
-                    w.rodzic.leweDziecko = null;
-                    w.rodzic = null;
-                }
-
-                else if (w == w.rodzic.praweDziecko)
-                {
-                    w.rodzic.praweDziecko = null;
-                    w.rodzic = null;
-                }
+                if (w == w.rodzic.leweDziecko) w.rodzic.leweDziecko = null;
+                else w.rodzic.praweDziecko = null;// if (w == w.rodzic.praweDziecko)
 
                 return null;
             }
 
             //2) gdy 1 dziecko, to dziecko wchodzi na miejsce rodzica
-            if (w.leweDziecko != null && w.praweDziecko == null)
+            else if (w.leweDziecko != null && w.praweDziecko == null)
             {
+                w.leweDziecko.rodzic = w.rodzic;
                 //wyszlismy jako prawe dziecko rodzica - Usun >= rodzic
-                if(w.wartosc >= w.rodzic.wartosc)
-                {
-                    w.rodzic.praweDziecko = w.leweDziecko;
-                    w.leweDziecko.rodzic = w.rodzic;
-
-                    //usuniecie wezla
-                    w.rodzic = null;
-                    w.leweDziecko = null;
-                }
-
-                //wyszlismy jako lewe dziecko rodzica - Usun < rodzic
-                else//(w.wartosc < w.rodzic.wartosc)
+                if (w == w.rodzic.leweDziecko)
                 {
                     w.rodzic.leweDziecko = w.leweDziecko;
-                    w.leweDziecko.rodzic = w.rodzic;
-
-                    //usuniecie wezla
-                    w.rodzic = null;
-                    w.leweDziecko = null;
                 }
-
-                return null;
+                //wyszlismy jako lewe dziecko rodzica - Usun < rodzic
+                else//(w == w.rodzic.praweDziecko)
+                {
+                    w.rodzic.praweDziecko = w.leweDziecko;
+                }
             }
-
-            if (w.praweDziecko != null && w.leweDziecko == null)
+            else if (w.praweDziecko != null && w.leweDziecko == null)
             {
+                w.praweDziecko.rodzic = w.rodzic;
                 //wyszlismy jako prawe dziecko rodzica - Usun >= rodzic
-                if (w.wartosc >= w.rodzic.wartosc)
+                if (w == w.rodzic.leweDziecko)
                 {
                     w.rodzic.praweDziecko = w.praweDziecko;
-                    w.praweDziecko.rodzic = w.rodzic;
-
-                    //usuniecie wezla
-                    w.rodzic = null;
-                    w.leweDziecko = null;
                 }
-
                 //wyszlismy jako lewe dziecko rodzica - Usun < rodzic
-                else//(w.wartosc < w.rodzic.wartosc)
+                else//(w == w.rodzic.praweDziecko)
                 {
                     w.rodzic.leweDziecko = w.praweDziecko;
-                    w.praweDziecko.rodzic = w.rodzic;
-
-                    //usuniecie wezla
-                    w.rodzic = null;
-                    w.praweDziecko = null;
                 }
-
-                return null;
             }
 
             //3) gdy 2 dzieci, to albo nastepnik albo poprzednik i on powiniem byc w 1) lub 2)
             if(w.leweDziecko != null && w.praweDziecko != null)
             {
                 var nastepnik = Nastepnik(w);
-
                 //przypadek gdy usuwamy korzen
-                if(w.rodzic == null)
+                if (w.rodzic == null)
                 {
+                    Usun(nastepnik);
+
                     w.leweDziecko.rodzic = nastepnik;
                     w.praweDziecko.rodzic = nastepnik;
                     nastepnik.leweDziecko = w.leweDziecko;
                     nastepnik.praweDziecko = w.praweDziecko;
                     drzewo.korzen = nastepnik;
-
-                    //usuwanie korzenia
-                    w.leweDziecko = null;
-                    w.praweDziecko = null;
+                    nastepnik.rodzic = null;
 
                     return null;
                 }
-                
+
+                Usun(nastepnik);
+
                 //wychodzi jako lewe dziecko rodzica
                 if (w == w.rodzic.leweDziecko)
                 {
                     w.rodzic.leweDziecko = nastepnik;
                     nastepnik.leweDziecko = w.leweDziecko;
-                    nastepnik.praweDziecko = null;
+
+                    if (w.praweDziecko != null)
+                    {
+                        nastepnik.praweDziecko = w.praweDziecko;
+                    }
+                        
                     nastepnik.rodzic = w.rodzic;
                     w.leweDziecko.rodzic = nastepnik;
-
-                    //usuwanie wezla
-                    w.praweDziecko = null;
-                    w.rodzic = null;
                 }
-                
                 //wychodzi jako prawe dziecko rodzica
                 else//(w == w.rodzic.praweDziecko)
                 {
                     w.rodzic.praweDziecko = nastepnik;
                     nastepnik.leweDziecko = w.leweDziecko;
-                    nastepnik.praweDziecko = null;
+                    if(w.praweDziecko != null)
+                    {
+                        nastepnik.praweDziecko = w.praweDziecko;
+                        w.praweDziecko.rodzic = nastepnik;
+                    }
+                    else
+                    {
+                        nastepnik.praweDziecko = null;
+                    }
                     nastepnik.rodzic = w.rodzic;
                     w.leweDziecko.rodzic = nastepnik;
-
-                    //usuwanie wezla
-                    w.praweDziecko = null;
-                    w.rodzic = null;
                 }
             }
 
