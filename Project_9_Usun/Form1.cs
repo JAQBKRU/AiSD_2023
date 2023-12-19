@@ -133,7 +133,7 @@ namespace Grafy
         private DrzewoBinarne drzewo;
         private void btn3_Click(object sender, EventArgs e)
         {
-            /*if (drzewo == null)
+            if (drzewo == null)
             {
                 drzewo = new DrzewoBinarne(5);
             }
@@ -149,7 +149,7 @@ namespace Grafy
             drzewo.Add(1);
             drzewo.Add(10);
             drzewo.Add(9);
-            drzewo.Add(12);*/
+            drzewo.Add(12);
 
             /*MessageBox.Show("Zad1: " + drzewo.Znajdz(6).ToString()
                 + "\nZad2: " + ZnajdzMin(drzewo.korzen).wartosc.ToString()
@@ -165,8 +165,8 @@ namespace Grafy
             //MessageBox.Show("Usun(8): " + ZnajdzMin(drzewo.korzen.praweDziecko).wartosc.ToString());//Usun(8)
 
             //Wezel - 2 dzieci
-            //Usun(drzewo.korzen.praweDziecko.leweDziecko);//Usun(6)
-            //MessageBox.Show("Usun(6): " + drzewo.korzen.praweDziecko.leweDziecko.wartosc.ToString());//Usun(6)
+            drzewo.Usun(drzewo.korzen.praweDziecko.leweDziecko);//Usun(6)
+            MessageBox.Show("Usun(6): " + drzewo.korzen.praweDziecko.leweDziecko.wartosc.ToString());//Usun(6)
             //Usun(drzewo.korzen);//Usun(korzen)
             //MessageBox.Show("Usun(korzen): " + drzewo.korzen.wartosc.ToString());//Usun(korzen)
         }
