@@ -1,4 +1,5 @@
 using System.Linq;
+using System.Text;
 using static Grafy.Form1;
 
 namespace Grafy
@@ -557,37 +558,157 @@ namespace Grafy
         // --- BFS ---
 
 
-        // --- Dijkstry ---
-        private void btn5_Click(object sender, EventArgs e)
+        // --- Dijkstra algorithm ---
+        //https://eduinf.waw.pl/inf/alg/001_search/0138.php
+        private void button2_Click(object sender, EventArgs e)
         {
+            WezelDijkstra w0 = new WezelDijkstra(0);
+            WezelDijkstra w1 = new WezelDijkstra(1);
+            WezelDijkstra w2 = new WezelDijkstra(2);
+            WezelDijkstra w3 = new WezelDijkstra(3);
+            WezelDijkstra w4 = new WezelDijkstra(4);
+            WezelDijkstra w5 = new WezelDijkstra(5);
 
+            w0.DodajKrawedz(new List<(WezelDijkstra, int)>{ (w1, 3), (w4, 3) });
+            w1.DodajKrawedz(new List<(WezelDijkstra, int)>{ (w2, 1) });
+            w2.DodajKrawedz(new List<(WezelDijkstra, int)>{ (w3, 3), (w5, 1) });
+            w3.DodajKrawedz(new List<(WezelDijkstra, int)>{ (w1, 3) });
+            w4.DodajKrawedz(new List<(WezelDijkstra, int)>{ (w5, 2) });
+            w5.DodajKrawedz(new List<(WezelDijkstra, int)>{ (w3, 1), (w0, 6) });
+
+            GrafDijkstra grafDijkstra = new();
+            grafDijkstra.listaWezlow.AddRange(new List<WezelDijkstra> { w0, w1, w2, w3, w4, w5} );
+            grafDijkstra.DijkstraAlgorithm();
         }
 
-
-        /*
-        public class Graf
+        public class GrafDijkstra
         {
-           List<Wezel44> listaWezlow = new();
-           List<Wezel44> listaKrawedzi = new();
+            public List<WezelDijkstra> listaWezlow = new();
+            public List<WezelDijkstra> listaKrawedzi = new();
+            public List<int> listaD = new();//zawiera najmniejsze koszty dojscia do danego wezla
+            public List<WezelDijkstra> listaP = new();//zawiera poprzedni wezel od aktualnego
+
+            public List<int> listaS = new();//wezly po operacji
+            public List<int> listaQ = new();//wezly oczekujace przed operacji
+
+            public GrafDijkstra()
+            {
+                this.listaWezlow = new List<WezelDijkstra>();
+            }
+
+            public void DijkstraAlgorithm()
+            {
+                //inicjalizacja podstawowych danych
+                for(int i = 0; i < listaWezlow.Count; i++)
+                {
+                    listaQ.Add(listaWezlow[i].wartosc);
+                    listaD.Add(int.MaxValue);//int.MaxValue to +inf
+                    listaP.Add(new WezelDijkstra(-1));
+                }
+
+                listaD[0] = 0;//najkrotsza droga z 0 do ...
+
+                //N: 0...5
+                for (int i = 0; i < listaWezlow.Count; i++)
+                {
+                    int kosztMin = NajmniejszyKoszt(listaD);
+                    /*string listaPwynik = "";
+                    foreach(WezelDijkstra w in listaP) listaPwynik += w.wartosc.ToString() + " ";
+                    MessageBox.Show($"S: {string.Join(", ", listaS)}\nQ: {string.Join(", ", listaQ)}\nd: {string.Join(", ", listaD)}\np: {listaPwynik}");//wyswietlanie stanu tabel po kazdej iteracji*/
+
+                    //iterujemy po sasiadach, po krawedziach w najmniejszym listaD
+                    foreach (KrawedzDijkstra krawedz in listaWezlow[kosztMin].listaKrawedzi)
+                    {
+                        int wezel_p = krawedz.poczatek.wartosc;
+                        int wezel_k = krawedz.koniec.wartosc;
+
+                        //aktualizowanie tabeli - porownywanie wezlow na krawedzi
+                        if (listaD[wezel_k] > (listaD[wezel_p] + krawedz.waga))
+                        {
+                            listaD[wezel_k] = listaD[wezel_p] + krawedz.waga;
+                            listaP[wezel_k] = krawedz.poczatek;
+                        }
+                    }
+                }
+
+                //wyswietlenie koncowej tabeli i sciezki do danego wezla
+                string N = "";
+                string d = "";
+                string p = "";
+                foreach (WezelDijkstra x in listaWezlow) N += x.wartosc.ToString() + " ";
+                foreach (int x in listaD) d += x.ToString() + " ";
+                foreach (WezelDijkstra x in listaP) p += x.wartosc.ToString() + " ";
+                MessageBox.Show($"N: {N}\nd: {d}\np: {p}\n{SciezkaDojsciaDoWezla(2)}");
+            }
+
+            public int NajmniejszyKoszt(List<int> listaD)
+            {
+                List<int> kopiaD = listaD.ToList();
+                int min = kopiaD.Min();
+                int minIndex = listaD.IndexOf(min);
+
+                if (!listaQ.Contains(minIndex))
+                {
+                    kopiaD[minIndex] = int.MaxValue;
+                    return NajmniejszyKoszt(kopiaD);
+                }
+
+                listaS.Add(minIndex);
+                listaQ.Remove(minIndex);
+
+                return minIndex;
+            }
+
+            public string SciezkaDojsciaDoWezla(int wezel)
+            {
+                WezelDijkstra aktualnyWezel = listaP[wezel];
+                StringBuilder sciezka = new(wezel.ToString());
+
+                while (aktualnyWezel.wartosc != -1)
+                {
+                    sciezka.Append(aktualnyWezel.wartosc);
+                    aktualnyWezel = listaP[aktualnyWezel.wartosc];
+                }
+
+                return $"sciezka do  {wezel}: {new string(sciezka.ToString().Reverse().ToArray())}";
+            }
         }
 
-        public class Wezel44
+        public class WezelDijkstra
         {
-           int wartosc;
-           List<Wezel44> listaKrawedzi = new();
+            public List<KrawedzDijkstra> listaKrawedzi = new();
+            public int wartosc;
+
+            public WezelDijkstra(int liczba)
+            {
+                this.wartosc = liczba;
+            }
+
+            public void DodajKrawedz(List<(WezelDijkstra, int)> krawedz)
+            {
+                foreach((WezelDijkstra wezel, int waga) in krawedz)
+                {
+                    this.listaKrawedzi.Add(new KrawedzDijkstra(this, wezel, waga));
+                    //wezel.listaKrawedzi.Add(new KrawedzDijkstra(wezel, this, waga));//bez tego dla grafu skierowanego
+                }
+            }
         }
 
-        public class Krawedz
+        public class KrawedzDijkstra
         {
-           int waga;
-           int poczatek;
-           int koniec;
-        }*/
-        // --- Dijkstry ---
-        private void button1_Click(object sender, EventArgs e)
-        {
+            public WezelDijkstra poczatek;
+            public WezelDijkstra koniec;
+            public int waga;
 
+            public KrawedzDijkstra(WezelDijkstra poczatek, WezelDijkstra koniec, int waga)
+            {
+                this.poczatek = poczatek;
+                this.koniec = koniec;
+                this.waga = waga;
+            }
         }
+        // --- Dijkstra algorithm ---
+
 
 
         // --- Kruskal algorithm ---
@@ -626,7 +747,7 @@ namespace Grafy
 
             Graf graf = new Graf();
             graf.listaWezlow.AddRange(new List<WezelKruskal> { w0, w1, w2, w3, w4, w5, w6, w7 });
-            
+
 
             //Kruskal graf 2
             /*WezelKruskal w0 = new WezelKruskal(0);
@@ -656,12 +777,11 @@ namespace Grafy
             graf.listaWezlow.AddRange(new List<WezelKruskal> { w0, w1, w2, w3, w4, w5});*/
 
 
-
             //umieszczenie wszystkich krawedzi (z duplikatami, np. 4-6 i 6-4) w notSortList
             List<Krawedz> notSortedKrawedzie = new();
-            foreach(WezelKruskal wezelKruskal in graf.listaWezlow)
+            foreach (WezelKruskal wezelKruskal in graf.listaWezlow)
             {
-                foreach(Krawedz krawedz in wezelKruskal.listaKrawedzi)
+                foreach (Krawedz krawedz in wezelKruskal.listaKrawedzi)
                 {
                     if (!notSortedKrawedzie.Contains(krawedz))
                         notSortedKrawedzie.Add(krawedz);
@@ -730,9 +850,9 @@ namespace Grafy
                 WezelKruskal wezel_k;
                 WezelKruskal tempWezel;
 
-                foreach(Krawedz krawedz in krawedzie)
+                foreach (Krawedz krawedz in krawedzie)
                 {
-                    
+
                     wezel_p = new WezelKruskal(krawedz.poczatek.wartosc);
                     wezel_k = new WezelKruskal(krawedz.koniec.wartosc);
                     wezel_p.DodajKrawedzSingle(krawedz);
@@ -741,7 +861,7 @@ namespace Grafy
                     //graf bez wezlow poczatkowych
                     if (listaGraf.Count == 0)
                     {
-                        graf.listaWezlow.AddRange(new List<WezelKruskal>{ wezel_p, wezel_k });
+                        graf.listaWezlow.AddRange(new List<WezelKruskal> { wezel_p, wezel_k });
                         graf.listaKrawedzi.Add(krawedz);
                         listaGraf.Add(graf);
                     }
@@ -843,7 +963,7 @@ namespace Grafy
                             + "\nIlosc grafow rozpinajacych: " + listaGraf.Count.ToString());*/
                     }
                 }
-                
+
                 return listaGraf;
             }
 
@@ -868,9 +988,9 @@ namespace Grafy
             {
                 foreach (Graf graf in grafy)
                 {
-                    foreach(WezelKruskal wezel in graf.listaWezlow)
+                    foreach (WezelKruskal wezel in graf.listaWezlow)
                     {
-                        if(wezel.wartosc == krawedz_p_lub_k.wartosc)
+                        if (wezel.wartosc == krawedz_p_lub_k.wartosc)
                             return wezel;
                     }
                 }
@@ -892,11 +1012,11 @@ namespace Grafy
 
             public void DodajKrawedz(List<(WezelKruskal, int)> krawedz)
             {
-                foreach((WezelKruskal wezel, int waga) in krawedz)
+                foreach ((WezelKruskal wezel, int waga) in krawedz)
                 {
                     this.listaWezlow.Add(wezel);
                     this.listaKrawedzi.Add(new Krawedz(this, wezel, waga));
-                } 
+                }
             }
 
             //metoda wykorzystywana w UtworzGrafRozpinajacy()

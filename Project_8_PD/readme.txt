@@ -1,1 +1,0 @@
-robiona praca domowa z 7.12 -> 14.12

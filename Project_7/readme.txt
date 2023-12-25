@@ -1,1 +1,0 @@
-zawiera pliki przed Project_8

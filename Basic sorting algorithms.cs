@@ -1,5 +1,5 @@
 ﻿//https://www.programiz.com/dsa/sorting-algorithm
-https://lamfo-unb.github.io/2019/04/21/Sorting-algorithms/
+//https://lamfo-unb.github.io/2019/04/21/Sorting-algorithms/
 
 //get data from user input
 //function to convert input data from "1 7 3 4   " to [1, 7, 3, 4]

@@ -62,6 +62,25 @@ namespace Dijkstry
             }
 
             MessageBox.Show(wynik.ToString());
+
+
+            /*StringBuilder wynik1 = new();
+            foreach (var x in dijkstry.g.listaWezlow)
+            {
+                //wynik1.Append(x.wartosc);
+                if(x.wartosc == 2)
+                {
+                    var x1 = dijkstry.g.listaWezlow[x.wartosc];
+                    while (true)
+                    {
+                        var x2 = x1.listaKrawedzi[2];
+                        var x3 = x2.koniec.wartosc;//x1.listaKrawedzi[x2.koniec.wartosc];
+                        x1 = x2.koniec;
+                        MessageBox.Show(x2.koniec.wartosc.ToString());
+                    }
+                }
+            }
+            MessageBox.Show(wynik1.ToString());*/
         }
 
         public class Krawedz
