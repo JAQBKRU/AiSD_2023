@@ -715,7 +715,6 @@ namespace Grafy
         //https://eduinf.waw.pl/inf/alg/001_search/0141.php
         private void button1_Click_1(object sender, EventArgs e)
         {
-            //Kruskal graf 1
             WezelKruskal w0 = new WezelKruskal(0);
             WezelKruskal w1 = new WezelKruskal(1);
             WezelKruskal w2 = new WezelKruskal(2);
@@ -736,84 +735,35 @@ namespace Grafy
             7: 1, 2, 6
             */
 
-            w0.DodajKrawedz(new List<(WezelKruskal, int)> { (w1, 5), (w3, 9), (w6, 3) });
-            w1.DodajKrawedz(new List<(WezelKruskal, int)> { (w0, 5), (w2, 9), (w4, 8), (w5, 6), (w7, 7) });
-            w2.DodajKrawedz(new List<(WezelKruskal, int)> { (w1, 9), (w3, 9), (w4, 4), (w6, 5), (w7, 3) });
-            w3.DodajKrawedz(new List<(WezelKruskal, int)> { (w0, 9), (w2, 9), (w6, 8) });
-            w4.DodajKrawedz(new List<(WezelKruskal, int)> { (w1, 8), (w2, 4), (w5, 2), (w6, 1) });
-            w5.DodajKrawedz(new List<(WezelKruskal, int)> { (w1, 6), (w4, 2), (w6, 6) });
-            w6.DodajKrawedz(new List<(WezelKruskal, int)> { (w0, 3), (w2, 5), (w3, 8), (w4, 1), (w5, 6), (w7, 9) });
-            w7.DodajKrawedz(new List<(WezelKruskal, int)> { (w1, 7), (w2, 3), (w6, 9) });
-
-            Graf graf = new Graf();
-            graf.listaWezlow.AddRange(new List<WezelKruskal> { w0, w1, w2, w3, w4, w5, w6, w7 });
-
-
-            //Kruskal graf 2
-            /*WezelKruskal w0 = new WezelKruskal(0);
-            WezelKruskal w1 = new WezelKruskal(1);
-            WezelKruskal w2 = new WezelKruskal(2);
-            WezelKruskal w3 = new WezelKruskal(3);
-            WezelKruskal w4 = new WezelKruskal(4);
-            WezelKruskal w5 = new WezelKruskal(5);
-
-            *//*krawedzie wychodzace z danego wezla
-            0: 1, 2
-            1: 0, 2
-            2: 0, 1, 3, 4, 5
-            3: 2, 5
-            4: 2, 5
-            5: 2, 3, 4
-            *//*
-
-            w0.DodajKrawedz(new List<(WezelKruskal, int)> { (w1, 4), (w2, 4) });
-            w1.DodajKrawedz(new List<(WezelKruskal, int)> { (w0, 4), (w2, 2) });
-            w2.DodajKrawedz(new List<(WezelKruskal, int)> { (w0, 4), (w1, 2), (w3, 2), (w4, 3), (w5, 4) });
-            w3.DodajKrawedz(new List<(WezelKruskal, int)> { (w2, 2), (w5, 3) });
-            w4.DodajKrawedz(new List<(WezelKruskal, int)> { (w2, 3), (w5, 3) });
-            w5.DodajKrawedz(new List<(WezelKruskal, int)> { (w2, 4), (w3, 3), (w4, 3) });
-
-            Graf graf = new Graf();
-            graf.listaWezlow.AddRange(new List<WezelKruskal> { w0, w1, w2, w3, w4, w5});*/
-
-
-            //umieszczenie wszystkich krawedzi (z duplikatami, np. 4-6 i 6-4) w notSortList
-            List<Krawedz> notSortedKrawedzie = new();
-            foreach (WezelKruskal wezelKruskal in graf.listaWezlow)
+            Graf graf = new();
+            graf.listaWezlow = new List<WezelKruskal> { w0, w1, w2, w3, w4, w5, w6, w7 };
+            graf.listaKrawedzi = new List<KrawedzKruskal>
             {
-                foreach (Krawedz krawedz in wezelKruskal.listaKrawedzi)
-                {
-                    if (!notSortedKrawedzie.Contains(krawedz))
-                        notSortedKrawedzie.Add(krawedz);
-                }
-            }
-
-            //sortowanie od A do Z
-            List<Krawedz> sortedKrawedzie = notSortedKrawedzie.OrderBy(krawedz => krawedz.waga).ToList();
-
-            //wyswietlenie notSortedKrawedzie
-            /*string notSortedKrawedzieString = "";
-            for (int i = 0; i < notSortedKrawedzie.Count - 1; i++)
-            {
-                notSortedKrawedzieString += $"{notSortedKrawedzie[i].poczatek.wartosc}-{notSortedKrawedzie[i].koniec.wartosc}: {notSortedKrawedzie[i].waga}\n";
-            }
-            MessageBox.Show("notSortedKrawedzie:\n" + notSortedKrawedzieString);*/
-
-            //wyswietlenie sortedKrawedzie od A do Z
-            /*string sortedKrawedzieString = "sortedKrawedzie:\n";
-            foreach(Krawedz krawedz in sortedKrawedzie)
-            {
-                sortedKrawedzieString += $"{krawedz.poczatek.wartosc}-{krawedz.koniec.wartosc}: {krawedz.waga}\n";
-            }
-            MessageBox.Show(sortedKrawedzieString);*/
+                new KrawedzKruskal(w4, w6, 1),
+                new KrawedzKruskal(w4, w5, 2),
+                new KrawedzKruskal(w2, w7, 3),
+                new KrawedzKruskal(w0, w6, 3),
+                new KrawedzKruskal(w2, w4, 4),
+                new KrawedzKruskal(w0, w1, 5),
+                new KrawedzKruskal(w2, w6, 5),
+                new KrawedzKruskal(w1, w5, 6),
+                new KrawedzKruskal(w5, w6, 6),
+                new KrawedzKruskal(w1, w7, 7),
+                new KrawedzKruskal(w1, w4, 8),
+                new KrawedzKruskal(w3, w6, 8),
+                new KrawedzKruskal(w0, w3, 9),
+                new KrawedzKruskal(w1, w2, 9),
+                new KrawedzKruskal(w2, w3, 9),
+                new KrawedzKruskal(w6, w7, 9)
+            };
 
             //Wynikowe polecenie zwracajace utworzony graf rozpinajacy (bez cykli)
-            Graf drzewoRozpinajace = graf.UtworzGrafRozpinajacy(sortedKrawedzie)[0];
+            Graf drzewoRozpinajace = graf.UtworzGrafRozpinajacy()[0];
 
             //sprawdzenie poszczegolnych stanow grafu rozpinajacego
             //wyswietlenie wagi
             int sumaWag = 0;
-            foreach (Krawedz krawedz in drzewoRozpinajace.listaKrawedzi)
+            foreach (KrawedzKruskal krawedz in drzewoRozpinajace.listaKrawedzi)
             {
                 sumaWag += krawedz.waga;
             }
@@ -835,142 +785,109 @@ namespace Grafy
         public class Graf
         {
             public List<WezelKruskal> listaWezlow = new();
-            public List<Krawedz> listaKrawedzi = new();
-            public List<Graf> listaGraf = new();//przechowuje osobne grafy rozpinajace, ktore nastepnie scalamy w jeden wynikowy
+            public List<KrawedzKruskal> listaKrawedzi = new();
+            public List<Graf> listaGrafow = new();//przechowuje osobne grafy rozpinajace, ktore nastepnie scalamy w jeden wynikowy
 
             public Graf()
             {
                 listaWezlow = new List<WezelKruskal>();
             }
 
-            public List<Graf> UtworzGrafRozpinajacy(List<Krawedz> krawedzie)
+            public List<Graf> UtworzGrafRozpinajacy()
             {
                 Graf graf = new();
-                WezelKruskal wezel_p;
-                WezelKruskal wezel_k;
-                WezelKruskal tempWezel;
 
-                foreach (Krawedz krawedz in krawedzie)
+                //posortowanie krawedzi wg wagi ASC
+                listaKrawedzi = listaKrawedzi.OrderBy(k => k.waga).ToList();
+
+                foreach (KrawedzKruskal krawedz in listaKrawedzi)
                 {
+                    WezelKruskal wezel_p = new WezelKruskal(krawedz.poczatek.wartosc);
+                    WezelKruskal wezel_k = new WezelKruskal(krawedz.koniec.wartosc);
+                    wezel_p.DodajKrawedz(krawedz);
+                    wezel_k.DodajKrawedz(krawedz);
 
-                    wezel_p = new WezelKruskal(krawedz.poczatek.wartosc);
-                    wezel_k = new WezelKruskal(krawedz.koniec.wartosc);
-                    wezel_p.DodajKrawedzSingle(krawedz);
-                    wezel_k.DodajKrawedzSingle(krawedz);
+                    int wezlyPasujace = WezlyPasujace(krawedz);//return: 0,1,2
 
                     //graf bez wezlow poczatkowych
-                    if (listaGraf.Count == 0)
+                    if (listaGrafow.Count == 0)
                     {
                         graf.listaWezlow.AddRange(new List<WezelKruskal> { wezel_p, wezel_k });
                         graf.listaKrawedzi.Add(krawedz);
-                        listaGraf.Add(graf);
+                        listaGrafow.Add(graf);
                     }
                     else
                     {
                         //doczepienie wezla z krawedzia do istniejacego grafu
-                        if (WezlyPasujace(krawedz) == 1)
+                        if (wezlyPasujace == 1)
                         {
-                            for (int j = 0; j < listaGraf.Count; j++)
+                            foreach (var g in listaGrafow)
                             {
-                                for (int k = 0; k < listaGraf[j].listaWezlow.Count; k++)
+                                foreach (var wezel in g.listaWezlow)
                                 {
-                                    /*MessageBox.Show("wezly w G(" + j.ToString() + "): "
-                                        + listaGraf[j].listaWezlow.Count.ToString() 
-                                        + "\n(" + krawedz.poczatek.wartosc.ToString() + ") == "
-                                        + listaGraf[j].listaWezlow[k].wartosc.ToString()
-                                        + " dla k: (" + krawedz.poczatek.wartosc.ToString()
-                                        + ")-" + krawedz.koniec.wartosc.ToString());*/
+                                    var aktualnyWierzcholek = krawedz.poczatek;
                                     //czy krawedz (poczatek) ze stosu krawedzi laczy sie z danym wezlem w danym grafie
-                                    if (krawedz.poczatek.wartosc == listaGraf[j].listaWezlow[k].wartosc)
+                                    if (aktualnyWierzcholek.wartosc == wezel.wartosc)
                                     {
-                                        listaGraf[j].listaKrawedzi.Add(krawedz);
-                                        listaGraf[j].listaWezlow.Add(krawedz.koniec);
+                                        g.listaKrawedzi.Add(krawedz);
+                                        g.listaWezlow.Add(krawedz.koniec);
                                         break;
                                     }
+
+                                    aktualnyWierzcholek = krawedz.koniec;
                                     //czy krawedz (koniec) ze stosu krawedzi laczy sie z danym wezlem w danym grafie
-                                    else if (krawedz.koniec.wartosc == listaGraf[j].listaWezlow[k].wartosc)
+                                    if (aktualnyWierzcholek.wartosc == wezel.wartosc)
                                     {
-                                        listaGraf[j].listaKrawedzi.Add(krawedz);
-                                        listaGraf[j].listaWezlow.Add(krawedz.poczatek);
+                                        g.listaKrawedzi.Add(krawedz);
+                                        g.listaWezlow.Add(krawedz.poczatek);
                                         break;
                                     }
                                 }
                             }
                         }
                         //polaczenie dwoch grafow w jeden rozpinajacy
-                        else if (WezlyPasujace(krawedz) == 2)
+                        else if (wezlyPasujace == 2)
                         {
-                            tempWezel = ZwrocWezelDoPodczepieniaSingle(listaGraf, krawedz.poczatek);
-                            WezelKruskal tempWezel2 = ZwrocWezelDoPodczepieniaSingle(listaGraf, krawedz.koniec);
+                            WezelKruskal tempWezel = ZwrocWezelDoPodczepienia(krawedz.poczatek);
+                            WezelKruskal tempWezel2 = ZwrocWezelDoPodczepienia(krawedz.koniec);
                             Graf grafScalony = new();
 
                             List<int> indexToRemove = new();
-                            for (int j = 0; j < listaGraf.Count; j++)
+                            for (int j = 0; j < listaGrafow.Count; j++)
                             {
                                 //czy graf[j] zawiera krawedz.p/.k
-                                if (listaGraf[j].listaWezlow.Contains(tempWezel))
+                                if (listaGrafow[j].listaWezlow.Contains(tempWezel) || listaGrafow[j].listaWezlow.Contains(tempWezel2))
                                 {
                                     //przeniesienie krawedzi/wezlow do grafu scalonego
-                                    for (int k = 0; k < listaGraf[j].listaKrawedzi.Count; k++)
-                                    {
-                                        grafScalony.listaKrawedzi.Add(listaGraf[j].listaKrawedzi[k]);
-                                    }
-                                    for (int k = 0; k < listaGraf[j].listaWezlow.Count; k++)
-                                    {
-                                        grafScalony.listaWezlow.Add(listaGraf[j].listaWezlow[k]);
-                                    }
-
-                                    indexToRemove.Add(j);
-                                }
-
-                                if (listaGraf[j].listaWezlow.Contains(tempWezel2))
-                                {
-                                    //przeniesienie krawedzi/wezlow do grafu scalonego
-                                    for (int k = 0; k < listaGraf[j].listaKrawedzi.Count; k++)
-                                    {
-                                        grafScalony.listaKrawedzi.Add(listaGraf[j].listaKrawedzi[k]);
-                                    }
-                                    for (int k = 0; k < listaGraf[j].listaWezlow.Count; k++)
-                                    {
-                                        grafScalony.listaWezlow.Add(listaGraf[j].listaWezlow[k]);
-                                    }
-
+                                    grafScalony.listaKrawedzi.AddRange(listaGrafow[j].listaKrawedzi);
+                                    grafScalony.listaWezlow.AddRange(listaGrafow[j].listaWezlow);
                                     indexToRemove.Add(j);
                                 }
                             }
 
                             grafScalony.listaKrawedzi.Add(krawedz);
-                            listaGraf.RemoveAt(indexToRemove[1]);
-                            listaGraf.RemoveAt(indexToRemove[0]);
-                            listaGraf.Insert(0, grafScalony);//prawdopodobnie zapobiega dla n>2 grafow rozpinajacych
+                            listaGrafow.RemoveAt(indexToRemove[1]);
+                            listaGrafow.RemoveAt(indexToRemove[0]);
+                            listaGrafow.Insert(0, grafScalony);//prawdopodobnie zapobiega dla n>2 grafow rozpinajacych
                         }
                         //utworzenie odrebnego grafu rozpinajacego
-                        else if (WezlyPasujace(krawedz) == 0)
+                        else if (wezlyPasujace == 0)
                         {
                             graf = new Graf();
                             graf.listaWezlow.AddRange(new List<WezelKruskal> { wezel_p, wezel_k });
                             graf.listaKrawedzi.Add(krawedz);
-                            listaGraf.Add(graf);
+                            listaGrafow.Add(graf);
                         }
-                        //przypadek likwidujacy powstanie cykli
-                        /*else if (WezlyPasujace(krawedz) == -2)
-                        {
-                            //MessageBox.Show("Cykl");
-                        }*/
-
-                        /*MessageBox.Show(krawedz.poczatek.wartosc.ToString() + " --(" 
-                            + krawedz.waga.ToString() + ")--> " + krawedz.koniec.wartosc.ToString()
-                            + "\nIlosc grafow rozpinajacych: " + listaGraf.Count.ToString());*/
                     }
                 }
 
-                return listaGraf;
+                return listaGrafow;
             }
 
-            public int WezlyPasujace(Krawedz krawedz)
+            public int WezlyPasujace(KrawedzKruskal krawedz)
             {
                 int sumaPasujacych = 0;
-                foreach (Graf graf in listaGraf)
+                foreach (Graf graf in listaGrafow)
                 {
                     int pasujaceWezly = graf.listaWezlow.Count(wezel =>
                         wezel.wartosc == krawedz.poczatek.wartosc || wezel.wartosc == krawedz.koniec.wartosc);//zapobiega powstawaniu cyklu
@@ -984,9 +901,9 @@ namespace Grafy
                 return sumaPasujacych;
             }
 
-            public WezelKruskal ZwrocWezelDoPodczepieniaSingle(List<Graf> grafy, WezelKruskal krawedz_p_lub_k)
+            public WezelKruskal ZwrocWezelDoPodczepienia(WezelKruskal krawedz_p_lub_k)
             {
-                foreach (Graf graf in grafy)
+                foreach (Graf graf in listaGrafow)
                 {
                     foreach (WezelKruskal wezel in graf.listaWezlow)
                     {
@@ -1003,54 +920,31 @@ namespace Grafy
         {
             public int wartosc;
             public List<WezelKruskal> listaWezlow = new();
-            public List<Krawedz> listaKrawedzi = new();
+            public List<KrawedzKruskal> listaKrawedzi = new();
 
             public WezelKruskal(int wartosc)
             {
                 this.wartosc = wartosc;
             }
 
-            public void DodajKrawedz(List<(WezelKruskal, int)> krawedz)
-            {
-                foreach ((WezelKruskal wezel, int waga) in krawedz)
-                {
-                    this.listaWezlow.Add(wezel);
-                    this.listaKrawedzi.Add(new Krawedz(this, wezel, waga));
-                }
-            }
-
-            //metoda wykorzystywana w UtworzGrafRozpinajacy()
-            public void DodajKrawedzSingle(Krawedz krawedz)
+            public void DodajKrawedz(KrawedzKruskal krawedz)
             {
                 this.listaWezlow.Add(krawedz.poczatek);
                 this.listaKrawedzi.Add(krawedz);
             }
         }
 
-        public class Krawedz
+        public class KrawedzKruskal
         {
             public WezelKruskal poczatek;
             public WezelKruskal koniec;
             public int waga;
 
-            public Krawedz(WezelKruskal poczatek, WezelKruskal koniec, int waga)
+            public KrawedzKruskal(WezelKruskal poczatek, WezelKruskal koniec, int waga)
             {
                 this.poczatek = poczatek;
                 this.koniec = koniec;
                 this.waga = waga;
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (obj == null || GetType() != obj.GetType())
-                {
-                    return false;
-                }
-
-                Krawedz other = (Krawedz)obj;
-
-                return (poczatek == other.poczatek && koniec == other.koniec) ||
-                       (poczatek == other.koniec && koniec == other.poczatek);
             }
         }
         // --- Kruskal algorithm ---
