@@ -802,10 +802,10 @@ namespace Grafy
 
                 foreach (KrawedzKruskal krawedz in listaKrawedzi)
                 {
-                    WezelKruskal wezel_p = new WezelKruskal(krawedz.poczatek.wartosc);
-                    WezelKruskal wezel_k = new WezelKruskal(krawedz.koniec.wartosc);
-                    wezel_p.DodajKrawedz(krawedz);
-                    wezel_k.DodajKrawedz(krawedz);
+                    WezelKruskal wezel_p = new(krawedz.poczatek.wartosc);
+                    WezelKruskal wezel_k = new(krawedz.koniec.wartosc);
+                    wezel_p.DodajKrawedz(krawedz, 'k');
+                    wezel_k.DodajKrawedz(krawedz, 'p');
 
                     int wezlyPasujace = WezlyPasujace(krawedz);//return: 0,1,2
 
@@ -826,20 +826,32 @@ namespace Grafy
                                 foreach (var wezel in g.listaWezlow)
                                 {
                                     var aktualnyWierzcholek = krawedz.poczatek;
-                                    //czy krawedz (poczatek) ze stosu krawedzi laczy sie z danym wezlem w danym grafie
+
                                     if (aktualnyWierzcholek.wartosc == wezel.wartosc)
                                     {
+                                        wezel.listaWezlow.Add(krawedz.koniec);
+                                        wezel.listaKrawedzi.Add(krawedz);
+
                                         g.listaKrawedzi.Add(krawedz);
-                                        g.listaWezlow.Add(krawedz.koniec);
+                                        var x1 = new WezelKruskal(krawedz.koniec.wartosc);
+                                        x1.DodajKrawedz(krawedz, 'p');
+                                        g.listaWezlow.Add(x1);
+                                        aktualnyWierzcholek.listaWezlow.Add(x1);
                                         break;
                                     }
 
                                     aktualnyWierzcholek = krawedz.koniec;
-                                    //czy krawedz (koniec) ze stosu krawedzi laczy sie z danym wezlem w danym grafie
+
                                     if (aktualnyWierzcholek.wartosc == wezel.wartosc)
                                     {
+                                        wezel.listaWezlow.Add(krawedz.poczatek);
+                                        wezel.listaKrawedzi.Add(krawedz);
+
                                         g.listaKrawedzi.Add(krawedz);
-                                        g.listaWezlow.Add(krawedz.poczatek);
+                                        var x2 = new WezelKruskal(krawedz.poczatek.wartosc);
+                                        x2.DodajKrawedz(krawedz, 'k');
+                                        g.listaWezlow.Add(x2);
+                                        aktualnyWierzcholek.listaWezlow.Add(x2);
                                         break;
                                     }
                                 }
@@ -855,9 +867,19 @@ namespace Grafy
                             List<int> indexToRemove = new();
                             for (int j = 0; j < listaGrafow.Count; j++)
                             {
-                                //czy graf[j] zawiera krawedz.p/.k
                                 if (listaGrafow[j].listaWezlow.Contains(tempWezel) || listaGrafow[j].listaWezlow.Contains(tempWezel2))
                                 {
+                                    if (listaGrafow[j].listaWezlow.Contains(tempWezel))
+                                    {
+                                        tempWezel.listaWezlow.Add(tempWezel2);
+                                        tempWezel.listaKrawedzi.Add(krawedz);
+                                    }
+                                    if (listaGrafow[j].listaWezlow.Contains(tempWezel2))
+                                    {
+                                        tempWezel2.listaWezlow.Add(tempWezel);
+                                        tempWezel2.listaKrawedzi.Add(krawedz);
+                                    }
+
                                     //przeniesienie krawedzi/wezlow do grafu scalonego
                                     grafScalony.listaKrawedzi.AddRange(listaGrafow[j].listaKrawedzi);
                                     grafScalony.listaWezlow.AddRange(listaGrafow[j].listaWezlow);
@@ -927,10 +949,14 @@ namespace Grafy
                 this.wartosc = wartosc;
             }
 
-            public void DodajKrawedz(KrawedzKruskal krawedz)
+            public void DodajKrawedz(KrawedzKruskal krawedz, char znak)
             {
-                this.listaWezlow.Add(krawedz.poczatek);
                 this.listaKrawedzi.Add(krawedz);
+
+                if(znak == 'p')
+                    this.listaWezlow.Add(krawedz.poczatek);
+                else
+                    this.listaWezlow.Add(krawedz.koniec);
             }
         }
 
@@ -950,6 +976,8 @@ namespace Grafy
         // --- Kruskal algorithm ---
 
         // [---] W DOMU DOKONCZYC [---]
+        //listy jednokierunkowe i dwukierunkowe - operacje na nich
+        //https://eduinf.waw.pl/inf/alg/001_search/0086.php
 
         //kolokwium - x1 teoria i x1 praktyka, np. przeprowadz algorytm
         //praktyka - zad z nastepnikiem i poprzednikiem raczej
