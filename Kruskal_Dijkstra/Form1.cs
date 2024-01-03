@@ -558,7 +558,7 @@ namespace Grafy
         // --- BFS ---
 
 
-        // --- Dijkstra algorithm ---
+        // --- Dijkstra algorithm - Szypul ---
         //https://eduinf.waw.pl/inf/alg/001_search/0138.php
         private void button2_Click(object sender, EventArgs e)
         {
@@ -569,15 +569,179 @@ namespace Grafy
             WezelDijkstra w4 = new WezelDijkstra(4);
             WezelDijkstra w5 = new WezelDijkstra(5);
 
-            w0.DodajKrawedz(new List<(WezelDijkstra, int)>{ (w1, 3), (w4, 3) });
-            w1.DodajKrawedz(new List<(WezelDijkstra, int)>{ (w2, 1) });
-            w2.DodajKrawedz(new List<(WezelDijkstra, int)>{ (w3, 3), (w5, 1) });
-            w3.DodajKrawedz(new List<(WezelDijkstra, int)>{ (w1, 3) });
-            w4.DodajKrawedz(new List<(WezelDijkstra, int)>{ (w5, 2) });
-            w5.DodajKrawedz(new List<(WezelDijkstra, int)>{ (w3, 1), (w0, 6) });
+            w0.DodajKrawedz(w1, 3);
+            w0.DodajKrawedz(w4, 3);
+            w1.DodajKrawedz(w2, 1);
+            w2.DodajKrawedz(w3, 3);
+            w2.DodajKrawedz(w5, 1);
+            w3.DodajKrawedz(w1, 4);
+            w4.DodajKrawedz(w5, 2);
+            w5.DodajKrawedz(w3, 1);
+            w5.DodajKrawedz(w0, 6);
 
             GrafDijkstra grafDijkstra = new();
-            grafDijkstra.listaWezlow.AddRange(new List<WezelDijkstra> { w0, w1, w2, w3, w4, w5} );
+            grafDijkstra.listaWezlow = new List<WezelDijkstra> { w0, w1, w2, w3, w4, w5 };
+            var tabela = grafDijkstra.DijkstraTabela(w0);
+            grafDijkstra.DijkstraAlgorytm(tabela);
+
+            MessageBox.Show(grafDijkstra.WyswietlTabele(tabela));
+            MessageBox.Show(grafDijkstra.SciezkaDoWezla(tabela, w3));
+        }
+
+        public class GrafDijkstra
+        {
+            public List<WezelDijkstra> listaWezlow = new();
+            public List<WezelDijkstra> listaKrawedzi = new();
+
+            public GrafDijkstra()
+            {
+                this.listaWezlow = new List<WezelDijkstra>();
+                this.listaKrawedzi = new List<WezelDijkstra>();
+            }
+
+            //utworzenie domyslnej tabeli
+            public Dictionary<WezelDijkstra, Element> DijkstraTabela(WezelDijkstra w)
+            {
+                var tabela = new Dictionary<WezelDijkstra, Element>();
+
+                foreach (WezelDijkstra wezel in this.listaWezlow)
+                {
+                    var e = new Element();
+
+                    if (wezel == w)
+                    {
+                        e.d = 0;
+                        e.p = new WezelDijkstra(-1);
+                    }
+                    tabela.Add(wezel, e);
+                }
+                return tabela;
+            }
+
+            public void DijkstraAlgorytm(Dictionary<WezelDijkstra, Element> tabela)
+            {
+                while (true)
+                {
+                    var niezrobione = tabela.Where(item => !item.Value.czyZrobione);
+
+                    if (niezrobione.Count() == 0)
+                        break;
+
+                    var min = niezrobione.OrderBy(item => item.Value.d).First();
+                    min.Value.czyZrobione = true;
+
+                    foreach (KrawedzDijkstra krawedz in min.Key.listaKrawedzi)
+                    {
+                        var nowyD = min.Value.d + krawedz.waga;
+
+                        if (nowyD < tabela[krawedz.koniec].d)
+                        {
+                            tabela[krawedz.koniec].d = nowyD;
+                            tabela[krawedz.koniec].p = min.Key;
+
+                        }
+                    }
+                }
+            }
+
+            public string WyswietlTabele(Dictionary<WezelDijkstra, Element> tab)
+            {
+                string N = "";
+                string d = "";
+                string p = "";
+                for (int i = 0; i < tab.Count(); i++)
+                {
+                    N += i + " ";
+                    d += tab[this.listaWezlow[i]].d + " ";
+                    p += tab[this.listaWezlow[i]].p.wartosc + " ";
+                }
+
+                return $"N: {N}\nd: {d}\np: {p}";
+            }
+
+            public string SciezkaDoWezla(Dictionary<WezelDijkstra, Element> tabela, WezelDijkstra wezel)
+            {
+                WezelDijkstra aktualnyWezel = tabela[wezel].p;
+                StringBuilder sciezka = new(wezel.wartosc.ToString());
+
+                while (aktualnyWezel.wartosc != -1)
+                {
+                    sciezka.Insert(0, aktualnyWezel.wartosc);
+                    aktualnyWezel = tabela[aktualnyWezel].p;
+                }
+
+                return $"Sciezka do {wezel.wartosc}: {sciezka}";
+            }
+        }
+
+        public class WezelDijkstra
+        {
+            public int wartosc;
+            public List<KrawedzDijkstra> listaKrawedzi = new();
+
+            public WezelDijkstra() { }
+
+            public WezelDijkstra(int liczba)
+            {
+                this.wartosc = liczba;
+            }
+
+            public void DodajKrawedz(WezelDijkstra w, int waga)
+            {
+                this.listaKrawedzi.Add(new KrawedzDijkstra(this, w, waga));
+                w.listaKrawedzi.Add(new KrawedzDijkstra(w, this, waga));
+            }
+        }
+
+        public class Element
+        {
+            public int d;
+            public WezelDijkstra p = new();
+            public bool czyZrobione;
+
+            public Element()
+            {
+                this.d = int.MaxValue;
+                this.p = null;
+                this.czyZrobione = false;
+            }
+        }
+
+        public class KrawedzDijkstra
+        {
+            public WezelDijkstra poczatek;
+            public WezelDijkstra koniec;
+            public int waga;
+
+            public KrawedzDijkstra(WezelDijkstra poczatek, WezelDijkstra koniec, int waga)
+            {
+                this.poczatek = poczatek;
+                this.koniec = koniec;
+                this.waga = waga;
+            }
+        }
+        // --- Dijkstra algorithm - Szypul ---
+
+        /*// --- Dijkstra algorithm ---
+        //https://eduinf.waw.pl/inf/alg/001_search/0138.php
+        private void button2_Click(object sender, EventArgs e)
+        {
+            WezelDijkstra w0 = new WezelDijkstra(0);
+            WezelDijkstra w1 = new WezelDijkstra(1);
+            WezelDijkstra w2 = new WezelDijkstra(2);
+            WezelDijkstra w3 = new WezelDijkstra(3);
+            WezelDijkstra w4 = new WezelDijkstra(4);
+            WezelDijkstra w5 = new WezelDijkstra(5);
+
+            w0.DodajKrawedz(new List<(WezelDijkstra, int)> { (w1, 3), (w4, 3) });
+            w1.DodajKrawedz(new List<(WezelDijkstra, int)> { (w2, 1) });
+            w2.DodajKrawedz(new List<(WezelDijkstra, int)> { (w3, 3), (w5, 1) });
+            w3.DodajKrawedz(new List<(WezelDijkstra, int)> { (w1, 3) });
+            w4.DodajKrawedz(new List<(WezelDijkstra, int)> { (w5, 2) });
+            w5.DodajKrawedz(new List<(WezelDijkstra, int)> { (w3, 1), (w0, 6) });
+
+            GrafDijkstra grafDijkstra = new();
+            grafDijkstra.listaWezlow.AddRange(new List<WezelDijkstra> { w0, w1, w2, w3, w4, w5 });
             grafDijkstra.DijkstraAlgorithm();
         }
 
@@ -599,7 +763,7 @@ namespace Grafy
             public void DijkstraAlgorithm()
             {
                 //inicjalizacja podstawowych danych
-                for(int i = 0; i < listaWezlow.Count; i++)
+                for (int i = 0; i < listaWezlow.Count; i++)
                 {
                     listaQ.Add(listaWezlow[i].wartosc);
                     listaD.Add(int.MaxValue);//int.MaxValue to +inf
@@ -612,9 +776,9 @@ namespace Grafy
                 for (int i = 0; i < listaWezlow.Count; i++)
                 {
                     int kosztMin = NajmniejszyKoszt(listaD);
-                    /*string listaPwynik = "";
-                    foreach(WezelDijkstra w in listaP) listaPwynik += w.wartosc.ToString() + " ";
-                    MessageBox.Show($"S: {string.Join(", ", listaS)}\nQ: {string.Join(", ", listaQ)}\nd: {string.Join(", ", listaD)}\np: {listaPwynik}");//wyswietlanie stanu tabel po kazdej iteracji*/
+                    string listaPwynik = "";
+                    foreach (WezelDijkstra w in listaP) listaPwynik += w.wartosc.ToString() + " ";
+                    MessageBox.Show($"S: {string.Join(", ", listaS)}\nQ: {string.Join(", ", listaQ)}\nd: {string.Join(", ", listaD)}\np: {listaPwynik}");//wyswietlanie stanu tabel po kazdej iteracji
 
                     //iterujemy po sasiadach, po krawedziach w najmniejszym listaD
                     foreach (KrawedzDijkstra krawedz in listaWezlow[kosztMin].listaKrawedzi)
@@ -686,7 +850,7 @@ namespace Grafy
 
             public void DodajKrawedz(List<(WezelDijkstra, int)> krawedz)
             {
-                foreach((WezelDijkstra wezel, int waga) in krawedz)
+                foreach ((WezelDijkstra wezel, int waga) in krawedz)
                 {
                     this.listaKrawedzi.Add(new KrawedzDijkstra(this, wezel, waga));
                     //wezel.listaKrawedzi.Add(new KrawedzDijkstra(wezel, this, waga));//bez tego dla grafu skierowanego
@@ -707,7 +871,7 @@ namespace Grafy
                 this.waga = waga;
             }
         }
-        // --- Dijkstra algorithm ---
+        // --- Dijkstra algorithm ---*/
 
 
 
