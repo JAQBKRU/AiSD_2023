@@ -1117,7 +1117,7 @@ namespace Grafy
             {
                 this.listaKrawedzi.Add(krawedz);
 
-                if(znak == 'p')
+                if (znak == 'p')
                     this.listaWezlow.Add(krawedz.poczatek);
                 else
                     this.listaWezlow.Add(krawedz.koniec);
@@ -1138,6 +1138,125 @@ namespace Grafy
             }
         }
         // --- Kruskal algorithm ---
+
+
+        // --- Kruskal algorithm - najkrotszy ---
+        //https://eduinf.waw.pl/inf/alg/001_search/0141.php
+        /*private void button1_Click_1(object sender, EventArgs e)
+        {
+            WezelKruskal w0 = new(0);
+            WezelKruskal w1 = new(1);
+            WezelKruskal w2 = new(2);
+            WezelKruskal w3 = new(3);
+            WezelKruskal w4 = new(4);
+            WezelKruskal w5 = new(5);
+            WezelKruskal w6 = new(6);
+            WezelKruskal w7 = new(7);
+
+            GrafKruskal g = new();
+            g.wezlyW = new List<WezelKruskal> { w0, w1, w2, w3, w4, w5, w6, w7 };
+            g.krawedzieW = new List<KrawedzKruskal>
+            {
+                new KrawedzKruskal(w4, w6, 1),
+                new KrawedzKruskal(w4, w5, 2),
+                new KrawedzKruskal(w2, w7, 3),
+                new KrawedzKruskal(w0, w6, 3),
+                new KrawedzKruskal(w2, w4, 4),
+                new KrawedzKruskal(w0, w1, 5),
+                new KrawedzKruskal(w2, w6, 5),
+                new KrawedzKruskal(w1, w5, 6),
+                new KrawedzKruskal(w5, w6, 6),
+                new KrawedzKruskal(w1, w7, 7),
+                new KrawedzKruskal(w1, w4, 8),
+                new KrawedzKruskal(w3, w6, 8),
+                new KrawedzKruskal(w0, w3, 9),
+                new KrawedzKruskal(w1, w2, 9),
+                new KrawedzKruskal(w2, w3, 9),
+                new KrawedzKruskal(w6, w7, 9)
+            };
+
+            Kruskal kruskal = new() { graf = g};
+            kruskal.KruskalAlgorithm();
+
+            //sprawdzenie poszczegolnych elementow min drzewa rozpinajacego - wagi, krawedzi, wezlow
+            int sumaWag = kruskal.listaKrawedzi.Sum(k => k.waga);
+            string wynikKrawedzie = string.Join("\n", kruskal.listaKrawedzi.Select(k => $"{k.poczatek.wartosc} - {k.koniec.wartosc}"));
+            string wynikWezly = string.Join("\n", kruskal.wezly.Select(n => $"{n}"));
+            MessageBox.Show("Krawedzie:\n" + wynikKrawedzie + "\n\nWezly:\n" + wynikWezly + "\nWaga drzewa rozpinajacego: " + sumaWag);
+        }
+
+        class GrafKruskal
+        {
+            public List<WezelKruskal> wezlyW = new();//zawiera wszystkie wezly
+            public List<KrawedzKruskal> krawedzieW = new();//zawiera wszystkie krawedzie
+        }
+
+        class Kruskal
+        {
+            public GrafKruskal graf = new();
+            public List<KrawedzKruskal> listaKrawedzi = new ();//zawiera krawedzie tworzace min drzewo rozp.
+            public List<List<WezelKruskal>> listaWezlow = new();//zawiera wezly tworzace min drzewo rozp.
+            public List<int> wezly = new();
+
+            public void KruskalAlgorithm()
+            {
+                graf.krawedzieW = graf.krawedzieW.OrderBy(o => o.waga).ToList();//sortowanie wg wagi ASC
+
+                //utworzenie n List, ktore beda zawierac osobne drzewa rozp. - pozniej sa scalane w jedno drzewo
+                for (int i = 0; i < graf.wezlyW.Count(); i++)
+                    listaWezlow.Add(new List<WezelKruskal>(){ graf.wezlyW[i] });
+
+                for (int i = 0; i < graf.krawedzieW.Count(); i++)
+                {
+                    //czy jest min ilosc krawedzi na drzewie, tzn n-1 - krawedzie "==" n - wierzcholki
+                    if (listaKrawedzi.Count() == graf.wezlyW.Count() - 1)
+                        break;
+
+                    KrawedzKruskal krawedz = graf.krawedzieW[i];
+                    int index1 = ZnajdzIndexListyListyWezlow(krawedz.poczatek);
+                    int index2 = ZnajdzIndexListyListyWezlow(krawedz.koniec);
+
+                    if (index1 == index2) continue;//cykl - pomijamy krawedz
+
+                    listaKrawedzi.Add(graf.krawedzieW[i]);
+                    listaWezlow[index1].AddRange(listaWezlow[index2]);
+                    listaWezlow.RemoveAt(index2);
+
+                    //odpowiednia kolejnosc wezlow
+                    if(!wezly.Contains(krawedz.poczatek.wartosc)) wezly.Add(krawedz.poczatek.wartosc);
+                    if(!wezly.Contains(krawedz.koniec.wartosc)) wezly.Add(krawedz.koniec.wartosc);
+                }
+            }
+
+            public int ZnajdzIndexListyListyWezlow(WezelKruskal w)
+            {
+                return listaWezlow.FindIndex(listaWezelow => listaWezelow.Contains(w));//return odpowiedni index lub -1
+            }
+        }
+
+        class WezelKruskal
+        {
+            public int wartosc;
+            public WezelKruskal() { }
+            public WezelKruskal(int wartosc)
+            {
+                this.wartosc = wartosc;
+            }
+        }
+
+        class KrawedzKruskal
+        {
+            public int waga;
+            public WezelKruskal poczatek, koniec;
+
+            public KrawedzKruskal(WezelKruskal a, WezelKruskal b, int w)
+            {
+                poczatek = a;
+                koniec = b;
+                waga = w;
+            }
+        }*/
+        // --- Kruskal algorithm - najkrotszy ---
 
         // [---] W DOMU DOKONCZYC [---]
         //listy jednokierunkowe i dwukierunkowe - operacje na nich
